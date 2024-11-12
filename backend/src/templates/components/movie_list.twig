@@ -1,0 +1,8 @@
+<ul>
+    {% for movie in movies %}
+        <li>
+            <h3>{{ movie.title }}</h3>
+            <p>Director: {{ movie.director }}</p>
+        </li>
+    {% endfor %}
+</ul>

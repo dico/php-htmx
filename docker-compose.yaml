@@ -1,0 +1,104 @@
+services:
+  backend:
+    container_name: php-htmx-backend
+    build:
+      context: ./backend/
+      dockerfile: .docker/Dockerfile
+    restart: on-failure
+    ports:
+      - "9360:80"
+    volumes:
+      - type: bind
+        source: ./backend/src
+        target: /var/www/html
+        bind:
+          propagation: shared
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+    environment:
+      - VIRTUAL_HOST=${BACKEND_URL}
+      - SELF_SIGNED_HOST=${BACKEND_URL}
+      - BACKEND_URL=${BACKEND_URL}
+      - FRONTEND_URL=${FRONTEND_URL}
+      - LETSENCRYPT_HOST=${BACKEND_URL}
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=${DB_HOST}
+      - JWT_ISSUER=${JWT_ISSUER}
+      - JWT_SECRET=${JWT_SECRET}
+    depends_on:
+      - db
+    networks:
+      - webproxy
+      - internal_network
+
+  frontend:
+    container_name: php-htmx-frontend
+    build:
+      context: ./frontend
+      dockerfile: .docker/Dockerfile
+    ports:
+      - "9361:3000"
+    volumes:
+      - type: bind
+        source: ./frontend/src
+        target: /usr/share/nginx/html
+        bind:
+          propagation: shared
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+    environment:
+      - VIRTUAL_HOST=${FRONTEND_URL}
+      - SELF_SIGNED_HOST=${FRONTEND_URL}
+      - FRONTEND_URL=${FRONTEND_URL}
+    networks:
+      - webproxy
+
+  db:
+    image: mysql:8.0
+    container_name: php-htmx-database
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - php-htmx-db:/var/lib/mysql
+      - ./db:/docker-entrypoint-initdb.d
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+    networks:
+      - internal_network
+
+
+  ## PHPmyadmin
+  phpmyadmin:
+    container_name: php-htmx-phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    links:
+      - db
+    environment:
+      PMA_HOST: ${DB_HOST}
+      PMA_PORT: 3306
+      UPLOAD_LIMIT: 300M
+    ports:
+      - '9365:80'
+    volumes:
+      - /sessions
+    networks:
+      - internal_network
+
+
+## VOLUMES
+volumes:
+  php-htmx-db:
+
+networks:
+  webproxy:
+    external: true
+  internal_network:
+    driver: bridge
