@@ -3,6 +3,8 @@
         <li>
             <h3>{{ book.title }}</h3>
             <p>Author: {{ book.author }}</p>
+            <p>Published Year: {{ book.published_year }}</p>
+            <a href="/books/{{ book.id }}">View Details</a>
         </li>
     {% endfor %}
 </ul>

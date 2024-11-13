@@ -5,9 +5,10 @@ FROM php:8.3-apache
 RUN apt-get update && apt-get install -y \
     libzip-dev \
     libicu-dev \
-    unzip && \
+    unzip \
+    default-mysql-client && \
     docker-php-ext-configure intl && \
-    docker-php-ext-install zip intl && \
+    docker-php-ext-install zip intl pdo_mysql && \
     rm -rf /var/lib/apt/lists/*
 
 # Enable Apache modules
@@ -34,9 +35,6 @@ WORKDIR /var/www/html
 
 # Add custom Apache VirtualHost configuration
 COPY .docker/vhost.conf /etc/apache2/sites-available/000-default.conf
-
-# Add shared .htaccess file
-#COPY .docker/.htaccess /var/www/html/.htaccess
 
 # Expose port 80 for web
 EXPOSE 80

@@ -15,7 +15,7 @@ class Get
 
     public function list()
     {
-        // Bruk Template::render som håndterer feil hvis templaten mangler
+        // Template render
         $htmlOutput = Template::render('components/movie_list.twig', ['movies' => $this->movies]);
 
         return Response::fromClientAccept([
