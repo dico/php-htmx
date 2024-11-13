@@ -10,10 +10,25 @@ This application serves as a testing ground for HTMX with a PHP backend. It can 
 - [ ]  Make a pretty frontend for a more realistic use case, like create, update and delete records. 
 
 
+## Revision
+
+### No base URL
+There is no way to set a base URL i HTMX. The goal was to get an environment variable from docker (for the backend API) and set it as base URL for the HTMX requests.
+After several hours of with Google, ChatGPT and testing things like addEventListener to 'htmx:configRequest' or <base>, it just did not work. The hx-trigger="load", would load from the same origin before we could change the URL.
+
+Making a template and swapping URLs in the build process works, but it add complexity for e.g. development environment - as we don't want to build for every time we save the page.
+
+The solution was to merge backend and frontend as two seperate containers into one. The API is available at /api on the same origin. If we have an application that conquer the world somehow, it's possible to split the containers and do some routing in a proxy.
+
+
+
+
 ## Prerequisites
 
 - You can run it as you want, but it's testet locally with docker as the "developer server" using [nginx-proxy/nginx-proxy](https://github.com/nginx-proxy/nginx-proxy) and [sebastienheyd/docker-self-signed-proxy-companion](https://github.com/sebastienheyd/docker-self-signed-proxy-companion). The environment-variables lile VIRTUAL_HOST and SELF_SIGNED_HOST in the docker-compose.yaml are used for the proxy.
 - Rename .env-sample to .env and update it.
+
+
 
 
 ## Background and Motivation

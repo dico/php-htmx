@@ -3,6 +3,8 @@
 require 'config.php';
 require 'vendor/autoload.php';
 
+error_log('REQUEST_URI: ' . $_SERVER['REQUEST_URI']);
+
 use FastRoute\RouteCollector;
 use App\Core\Response;
 
@@ -27,13 +29,16 @@ cors();
 
 // Create routes
 $dispatcher = FastRoute\simpleDispatcher(function(RouteCollector $r) {
-    // Books routes
-    $r->addRoute('GET', '/books', ['App\Books\Get', 'list']);
-    $r->addRoute('GET', '/books/{id:\d+}', ['App\Books\Get', 'get']);
-    
-    // Movies routes
-    $r->addRoute('GET', '/movies', ['App\Movies\Get', 'list']);
-    $r->addRoute('GET', '/movies/{id:\d+}', ['App\Movies\Get', 'get']);
+    // Group for /api routes
+    $r->addGroup('/api', function (RouteCollector $group) {
+        // Books routes
+        $group->addRoute('GET', '/books', ['App\Books\Get', 'list']);
+        $group->addRoute('GET', '/books/{id:\d+}', ['App\Books\Get', 'get']);
+
+        // Movies routes
+        $group->addRoute('GET', '/movies', ['App\Movies\Get', 'list']);
+        $group->addRoute('GET', '/movies/{id:\d+}', ['App\Movies\Get', 'get']);
+    });
 });
 
 

@@ -1,26 +1,24 @@
 services:
-  backend:
-    container_name: php-htmx-backend
+  app:
+    container_name: php-htmx-app
     build:
-      context: ./backend/
+      context: ./
       dockerfile: .docker/Dockerfile
     restart: on-failure
     ports:
-      - "9360:80"
+      - "9362:80"
     volumes:
       - type: bind
-        source: ./backend/src
+        source: ./src
         target: /var/www/html
         bind:
           propagation: shared
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
     environment:
-      - VIRTUAL_HOST=${BACKEND_URL}
-      - SELF_SIGNED_HOST=${BACKEND_URL}
-      - BACKEND_URL=${BACKEND_URL}
-      - FRONTEND_URL=${FRONTEND_URL}
-      - LETSENCRYPT_HOST=${BACKEND_URL}
+      - VIRTUAL_HOST=${HOST_URL}
+      - SELF_SIGNED_HOST=${HOST_URL}
+      - LETSENCRYPT_HOST=${HOST_URL}
       - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
@@ -33,28 +31,6 @@ services:
     networks:
       - webproxy
       - internal_network
-
-  frontend:
-    container_name: php-htmx-frontend
-    build:
-      context: ./frontend
-      dockerfile: .docker/Dockerfile
-    ports:
-      - "9361:3000"
-    volumes:
-      - type: bind
-        source: ./frontend/src
-        target: /usr/share/nginx/html
-        bind:
-          propagation: shared
-      - "/etc/timezone:/etc/timezone:ro"
-      - "/etc/localtime:/etc/localtime:ro"
-    environment:
-      - VIRTUAL_HOST=${FRONTEND_URL}
-      - SELF_SIGNED_HOST=${FRONTEND_URL}
-      - FRONTEND_URL=${FRONTEND_URL}
-    networks:
-      - webproxy
 
   db:
     image: mysql:8.0
