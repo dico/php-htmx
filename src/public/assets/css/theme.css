@@ -61,7 +61,7 @@ nav#nav-wrapper {
 
 nav#nav-wrapper #nav-brand {
 	flex:0 0 130px;
-	padding: 20px 20px;
+	padding: 20px 30px;
 }
 
 nav#nav-wrapper #nav-items { 
@@ -192,7 +192,8 @@ nav#nav-wrapper #nav-brand .logo-white, #mobile-logo .logo-white { display:var(-
         flex-direction: column;
         background-color: var(--navbar-bg-color);
         z-index: 1000;
-        overflow-y: auto;
+        /* overflow-y: auto; */
+		overflow-y: visible;
 		padding:10px;
     }
 
@@ -207,13 +208,15 @@ nav#nav-wrapper #nav-brand .logo-white, #mobile-logo .logo-white { display:var(-
 	nav#nav-wrapper #nav-brand .brand-image-full, #mobile-logo .brand-image-full { display:none; }
 	nav#nav-wrapper #nav-brand .brand-image-small, #mobile-logo .brand-image-small { display:block; }
 
-	nav#nav-wrapper ul#nav-items li a { padding: 15px 10px; }
+	nav#nav-wrapper ul#nav-items li a { padding: 10px 10px; }
 	nav#nav-wrapper ul#nav-items li a {	text-align: center;	}
 	nav#nav-wrapper ul#nav-items li a .svg-inline--fa {	margin-right: 0px; }
 
 	nav#nav-wrapper .title { display:none; }
 
 	nav#nav-wrapper #nav-footer { flex-direction: column; flex:0 0 150px; text-align: center; padding:0px; }
+
+	.submenu { transform: translate(-10px, -50%); }
 }
 
 
@@ -229,7 +232,8 @@ nav#nav-wrapper #nav-brand .logo-white, #mobile-logo .logo-white { display:var(-
         flex-direction: column;
         background-color: var(--navbar-bg-color);
         z-index: 1000;
-        overflow-y: auto;
+        /* overflow-y: auto; */
+		overflow-y: visible;
         transition: none;
     }
 
@@ -241,6 +245,8 @@ nav#nav-wrapper #nav-brand .logo-white, #mobile-logo .logo-white { display:var(-
 	nav#nav-wrapper #nav-brand .brand-image-small, #mobile-logo .brand-image-small { display:none; }
 
 	nav#nav-wrapper .title { display:inline-block; }
+
+	.submenu { transform: translate(0px, 20%); }
 }
 
 

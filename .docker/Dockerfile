@@ -24,7 +24,6 @@ RUN chown -R www-data:www-data /var/www/html
 # Copy composer files for API dependencies
 WORKDIR /var/www/html/api
 COPY ./src/api/composer.json composer.json
-COPY ./src/api/composer.lock composer.lock
 
 # Install composer dependencies
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
