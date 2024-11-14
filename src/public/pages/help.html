@@ -1,0 +1,87 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+
+<h1>Documentation for <code>routes.js</code></h1>
+<div class="section">
+	<h2>Overview of the Setup</h2>
+	<p><strong>Purpose:</strong></p>
+	<ul>
+		<li>Defines the client-side routing logic.</li>
+		<li>Manages navigation without requiring a full page reload.</li>
+		<li>Loads content dynamically into the <code>#main</code> element.</li>
+	</ul>
+	<p><strong>Features:</strong></p>
+	<ul>
+		<li>Routes to API-driven and static content sections.</li>
+		<li>Demonstrates modularity with dynamic imports (e.g., <code>FileUploader</code>).</li>
+	</ul>
+</div>
+
+<div class="section">
+	<h2>Route Definitions</h2>
+
+	<h3>1. Home Route (<code>/</code>)</h3>
+	<pre><code class="language-javascript">page('/', () =&gt; {
+    document.querySelector('#main').innerHTML = '&lt;p&gt;Welcome! Click a link to view content.&lt;/p&gt;';
+});</code></pre>
+	<p><strong>Description:</strong></p>
+	<p>This route displays a welcome message and serves as the default entry point.</p>
+
+	<h3>2. Books Route (<code>/books</code>)</h3>
+	<pre><code class="language-javascript">page('/books', () =&gt; {
+    htmx.ajax('GET', '/api/books', '#main');
+});</code></pre>
+	<p><strong>Description:</strong></p>
+	<p>Fetches book data from the <code>/api/books</code> endpoint and injects it into <code>#main</code> using <code>htmx.ajax</code>.</p>
+
+	<h3>3. Movies Route (<code>/movies</code>)</h3>
+	<pre><code class="language-javascript">page('/movies', () =&gt; {
+    htmx.ajax('GET', '/api/movies', '#main');
+});</code></pre>
+	<p><strong>Description:</strong></p>
+	<p>Similar to the Books route, but retrieves movie data from the <code>/api/movies</code> endpoint.</p>
+
+	<h3>4. Components Route (<code>/components</code>)</h3>
+	<pre><code class="language-javascript">page('/components', () =&gt; {
+    document.querySelector('#main').innerHTML = `
+        &lt;h2&gt;Component Testing&lt;/h2&gt;
+        &lt;div id=&quot;file-drop-zone&quot; class=&quot;drop-zone&quot;&gt;
+            &lt;p&gt;Drag and drop files here, or click to select files&lt;/p&gt;
+        &lt;/div&gt;
+    `;
+
+    import('./modules/FileUploader.js').then(({ default: FileUploader }) =&gt; {
+        new FileUploader('file-drop-zone', '/api/upload');
+    });
+});</code></pre>
+	<p><strong>Description:</strong></p>
+	<p>This route demonstrates component testing with a dynamic file uploader module.</p>
+
+	<h3>5. Help Route (<code>/help</code>)</h3>
+<pre><code class="language-javascript">page('/help', () =&gt; {
+    PageLoader.loadPage('/help.html', 'main');
+});</code></pre>
+	<p><strong>Description:</strong></p>
+	<p>Loads content from a static HTML file <code>help.html</code> and injects it into <code>#main</code>.</p>
+</div>
+
+<div class="section">
+	<h2>File Structure</h2>
+	<pre><code>/public
+/assets
+    help.html
+/modules
+    FileUploader.js
+/routes.js</code></pre>
+	<p>Ensure <code>help.html</code> is accessible via the <code>/public</code> folder for static file serving.</p>
+</div>
+
+<div class="section">
+	<h2>Extensibility</h2>
+	<ul>
+		<li>Add middleware for authentication checks.</li>
+		<li>Implement route-specific loading indicators.</li>
+		<li>Create custom error pages for unmatched routes.</li>
+	</ul>
+</div>

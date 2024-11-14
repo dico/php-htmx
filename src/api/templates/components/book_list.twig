@@ -4,7 +4,16 @@
             <h3>{{ book.title }}</h3>
             <p>Author: {{ book.author }}</p>
             <p>Published Year: {{ book.published_year }}</p>
-            <a href="/books/{{ book.id }}">View Details</a>
+            <button 
+                hx-get="/api/books/{{ book.id }}" 
+                hx-target="#book-detail" 
+                hx-swap="innerHTML">
+                View Details
+            </button>
         </li>
     {% endfor %}
 </ul>
+
+<div id="book-detail">
+    <p>Select a book to see details here.</p>
+</div>

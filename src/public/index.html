@@ -3,58 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Books and Movies 2</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- HTMX -->
-	<script src="environment.js"></script>
-    <script src="https://unpkg.com/htmx.org@1.7.0"></script>
-</head>
-<body>
-    <div class="container my-5">
-		<h1 class="text-center mb-4">Books and Movies</h1>
+    <title>PHP-HTMX</title>
 
-		<!-- Section for Books -->
-		<div class="mb-5">
-			<h2>Books</h2>
-			<div id="books-list" class="mt-3"
-                 hx-get="/api/books"
-                 hx-trigger="load"
-                 hx-swap="innerHTML">
-				<!-- Books list will be loaded here -->
-			</div>
+	<link rel="shortcut icon" href="/../favicon.ico?v=2" >
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/assets/img/icons/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/assets/img/icons/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/assets/img/icons/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/assets/img/icons/safari-pinned-tab.svg" color="#5bbad5">
+	<meta name="apple-mobile-web-app-title" content="Selfservice">
+	<meta name="application-name" content="Selfservice">
+	<meta name="msapplication-TileColor" content="#2b5797">
+	<meta name="theme-color" content="#2d2d2d">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/page/page.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.7.0"></script>
+
+	<link id="css-theme" href="/assets/css/dark.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="/assets/css/theme.css">
+</head>
+<body data-bs-color-scheme="light">
+	<div id="loader-fullscreen" style="display:none; color:#222; background-color:rgba(255,255,255,0.9); font-size:18px;">
+		<div>
+			<img src="/assets/img/animated_icons/animat-cloudsync-color.gif"><br />
 		</div>
 
-		<!-- Section for Movies -->
-		<div>
-			<h2>Movies</h2>
-			<div id="movies-list" class="mt-3"
-				hx-get="/api/movies"
-				hx-trigger="load"
-				hx-swap="innerHTML">
-				<!-- Movies list will be loaded here -->
-			</div>
+		<div id="loader-fullscreen-text" style="margin-top:1%;">
+			Loading... Please wait...
 		</div>
 	</div>
 
 
-    <!-- Bootstrap Bundle with Popper -->
+	<div id="mobile-header">
+		<div id="mobile-logo">
+			<a href="/">
+				<div class="logo-colored">
+					<img src="/assets/img/logo/logo_full_color.svg"> <span id="nav-tenant-name-light"></span> <!-- White theme, large -->
+				</div>
+				<div class="logo-white">
+					<img src="/assets/img/logo/logo_full_white.svg"> <span id="nav-tenant-name-dark"></span> <!-- Dark theme, large -->
+				</div>
+			</a>
+		</div>
+		<div id="toggle-sidebar">
+			<i class="fa-solid fa-bars"></i>
+		</div>
+	</div>
+
+
+
+	<div id="page-wrapper">
+
+		<nav id="nav-wrapper">
+			<div id="nav-brand">
+				<div class="brand-inner">
+					<div class="image brand-image-full">
+						<a href="/">
+							<div class="logo-colored">
+								<img src="/assets/img/logo/logo_full_color.svg"> <span id="nav-tenant-name-light"></span> <!-- White theme, large -->
+							</div>
+							<div class="logo-white">
+								<img src="/assets/img/logo/logo_full_white.svg"> <span id="nav-tenant-name-dark"></span> <!-- Dark theme, large -->
+							</div>
+						</a>
+					</div>
+
+					<div class="image brand-image-small">
+						<a href="/">
+							<div class="logo-colored">
+								<img src="/../assets/img/logo/logo_sm_color.svg"> <!-- White theme, small -->
+							</div>
+							<div class="logo-white">
+								<img src="/assets/img/logo/logo_sm_white.svg"> <!-- Dark theme, small -->
+							</div>
+						</a>
+					</div>
+				</div>
+			</div>
+
+			<ul id="nav-items">
+				<li>
+					<a class="nav-item sidebar-nav-item" href="/">
+						<i class="fa-solid fa-fw fa-house"></i> <span class="title">Home</span>
+					</a>
+				</li>
+
+				<li>
+					<a class="nav-item sidebar-nav-item" href="/books">
+						<i class="fa-solid fa-fw fa-book"></i> <span class="title">HTMX -> Books</span>
+					</a>
+				</li>
+
+				<li>
+					<a class="nav-item sidebar-nav-item" href="/movies">
+						<i class="fa-solid fa-fw fa-film"></i> <span class="title">HTMX -> Movies</span>
+					</a>
+				</li>
+
+				<li>
+					<a class="nav-item sidebar-nav-item" href="/components">
+						<i class="fa-solid fa-fw fa-swatchbook"></i> <span class="title">Components</span>
+					</a>
+				</li>
+
+				<li>
+					<a class="nav-item sidebar-nav-item" href="/help">
+						<i class="fa-regular fa-fw fa-circle-question"></i> <span class="title">Help</span>
+					</a>
+				</li>
+			</ul>
+
+			<div id="nav-footer">
+				<a class="nav-item" id="theme-icon" href="#">
+					<span><i class="fa-regular fa-fw fa-sun"></i></span>
+				</a>
+
+
+				<div class="dropdown dropup notification-dropdown">
+					<a class="nav-item" href="#" id="navbarMyUserDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fa-solid fa-fw fa-user"></i>
+					</a>
+
+					<div class="dropdown-menu" aria-labelledby="navbarMyUserDropdown">
+						<h6 class="dropdown-header">Me, myself and I</h6>
+						<a class="dropdown-item" href="/me"><i class="fal fa-fw fa-user"></i> My profile</a>
+						<div class="dropdown-divider"></div>
+
+						<li class="dropdown-item" id="settingsDropdown" role="button">
+							<a href="#">
+								<i class="fal fa-fw fa-building"></i> My organizations <span class="arrow-right"><i class="fa-solid fa-chevron-right"></i></span>
+							</a>
+							<ul class="submenu dropdown-menu" id="main-sidebar-nav-my-organizations">
+								<div style="padding:10px;">No organizations found</div>
+							</ul>
+						</li>
+
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item" href="javascript:app.sign_out();"><i class="fa-solid fa-fw fa-right-from-bracket"></i> Logg av</a>
+					</div>
+				</div>
+
+				<a class="nav-item" href="/settings">
+					<span><i class="fa-solid fa-gear"></i></span>
+				</a>
+
+			</div>
+		</nav>
+
+		<div id="main"></div>
+
+	</div>
+
+
+	<script type="module" src="/assets/js/main.js"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/js/all.min.js" integrity="sha512-6sSYJqDreZRZGkJ3b+YfdhB3MzmuP9R7X1QZ6g5aIXhRvR1Y/N/P47jmnkENm7YL3oqsmI6AK+V6AD99uWDnIw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-
-	<script>
-		/* const observer = new MutationObserver((mutations) => {
-			mutations.forEach((mutation) => {
-				mutation.addedNodes.forEach((node) => {
-				if (node.nodeType === 1 && !node["htmx-internal-data"]) {
-					htmx.process(node)
-				}
-				})
-			})
-		})
-		observer.observe(document, {childList: true, subtree: true}) */
-	</script>
-
-	
 </body>
 </html>
